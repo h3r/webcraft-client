@@ -89,6 +89,16 @@
 				<div id="canvas-placer"></div>
 				<div id="canvas-slider" value='0' style="width: 100%;"></div>
 				<input type="checkbox" name="playpause" checked>
+				<!--COMMENTS TEST -->
+				<div class="input-group">
+					<input id="user" type="text" class="form-control input-sm" value="" placeholder="User" />
+					<span class="input-group-btn" style="width:0px;"></span>
+					<input id="comment" type="text" class="form-control input-sm" value="" style="margin-left:-1px" placeholder="Comment" />
+					<span class="input-group-btn" style="width:0px;"></span>
+					<button id="sendbutton" type="button" class="btn btn-default" style="margin-left:-2px">send</button>
+				</div>
+				<div id="comments-placer"></div>
+				<!--COMMENTS TEST -->
 				<!--<p><img class="img-responsive" src="../assets/img/blog01.jpg" alt=""></p>-->
 				<div id="article-placer"></div>
 				<a id="previous-book" class="btn btn-primary btn-sm"><span class="glyphicon glyphicon-chevron-left" aria-hidden="true" style="color:white; font-size:1em"></span></a>
@@ -221,6 +231,57 @@
 		$("#my-overlay-text").hide();
 	};
 
+	////SENDGETCOMMENTS start
+	var sendComment = function(obj, $callback){
+		$.ajax({
+			url:"sendcomment.php",
+			type: "post",
+			data :obj,
+			dataType:"json",
+			success: $callback
+		});
+	}
+
+	var getComments = function($callback){
+		obj = {};
+		obj.a =getQueryVariable('a');
+		obj.b =getQueryVariable('b');
+		$.ajax({
+			url:"getcomments.php",
+			type: "post",
+			data :obj,
+			dataType:"json",
+			success: $callback
+		});
+	}
+
+
+	$( "#sendbutton" ).on('click', function() {
+		if(!($("#user").val().length === 0)){
+			$("#sendbutton").prop("disabled",true);
+			var obj = {};
+			obj.a =getQueryVariable('a');
+			obj.b =getQueryVariable('b');
+			obj.user = $("#user").val();
+			obj.comment = $("#comment").val();;
+			obj.xyz = [10,20,30]; //faltan coordenadas
+			obj.date = "10/10/1745"; //falta fecha?
+			sendComment(obj, function(result){
+				$("#user").val("");
+				$("#comment").val("");
+				$("#sendbutton").prop("disabled",false);
+
+				getComments(function(result){
+					$("#comments-placer").html(result);
+				});
+			});
+		}
+	});
+
+	getComments(function(result){
+		$("#comments-placer").html(result);
+	});
+	///SENDGETCOMMENTS end
 
 	//--------------------------------------------------------------------------
 	myScn.init();
