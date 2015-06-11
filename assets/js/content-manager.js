@@ -39,7 +39,6 @@ var miobj;
 function loadArticleContent(url,a,b){
 
     a = a.replace(/-/g,' ');
-    console.log(a);
     $.ajax({
         dataType: "json",
         url: url+'posts',
@@ -68,7 +67,6 @@ function loadArticleContent(url,a,b){
                 for(var i=1; i< article.pages.length;i++){
                   var converter = new Showdown.converter();
                   var html = converter.makeHtml(article.pages[i]);
-                  console.log(html);
                     str += html;
                 }
                 article_placer.innerHTML = str;
@@ -81,10 +79,8 @@ function loadArticleContent(url,a,b){
                         value:obj.children.length}
                 ).on('slide', function(e){
                         var sliderHide = parseInt($(".tooltip-inner").html());
-                        //console.log(Object.keys(obj));
                         for(var i=0; i<obj.children.length; i++){
                             if(obj["children"][i].position.y<sliderHide){
-                                //console.log(obj.children[i]);
                                 obj["children"][i]["visible"] = true;
                             }else{
                                 obj["children"][i]["visible"] = false;

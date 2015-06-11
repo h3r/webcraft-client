@@ -197,13 +197,19 @@
 	update = function(dt){
 		controls.update();
 		if(scene.getObjectByName("myObject")){
-			if(play)
+			if(!play)
 				rotateAroundWorldAxis(scene.getObjectByName("myObject"), new THREE.Vector3(0,1,0), ROT_SPEED );
+		}
+		if(scene.getObjectByName("linesGroup")){
+			if(!play)
+				rotateAroundWorldAxis(scene.getObjectByName("linesGroup"), new THREE.Vector3(0,1,0), ROT_SPEED );
 		}
 
 	};
 	//If you wanna do something else... put it here ----------------------------
-
+	var linesGroup = new THREE.Object3D();
+	linesGroup.name = 'linesGroup';
+	scene.add(linesGroup);
 
 	var base = createCircle({size:50});
 	base.name = 'base';
