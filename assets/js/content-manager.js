@@ -87,7 +87,7 @@ function loadArticleContent(url,a,b){
                             }
                         }
                     });
-
+                controls.target.copy(obj.box.center());
                 miobj = obj;
                 scene.add(obj);
             },{start:parseInt(article.xyz[1]),end:parseInt(article.xyz[4])});

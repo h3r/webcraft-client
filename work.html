@@ -89,6 +89,52 @@
 				<div id="canvas-placer"></div>
 				<div id="canvas-slider" value='0' style="width: 100%;"></div>
 				<input type="checkbox" name="playpause" checked>
+
+				<div class="comment-3d">
+					<div class="comment-3d-title">NOT GATE SPOTED</div>
+					<div class="comment-3d-icon circle_pie"></div>
+					<div class="comment-3d-container">
+
+						<div class="comment-3d-content">
+							<img src="assets/img/avatar.jpg" sizes="64px 64px" align="left">
+							Hola que tal como estas?
+							<div class="comment-3d-reply-container">
+								<div class="comment-3d-reply">
+									ESto es mi rewply
+								</div>
+								<div class="comment-3d-reply">
+									ESto es mi rewply
+								</div>
+								<div class="comment-3d-reply">
+									ESto es mi rewply
+								</div>
+								<div class="comment-3d-reply">
+									ESto es mi rewply
+								</div>
+							</div>
+							<p class="btnplacer"align="right"><button class="btn btn-sm btn-success">+</button></p>
+
+
+						</div>
+
+					</div>
+				</div>
+				<form>
+					<div class="comment-3d-form">
+						<input type="text" name="title" class="comment-3d-title" placeholder="your tittle">
+						<div class="comment-3d-icon circle_pie"></div>
+						<div class="comment-3d-container">
+
+							<div class="comment-3d-content-form">
+								<div contentEditable=true name="content" data-ph="whatever you like to say..."></div>
+								<button class="btn" type="submit" name="submit">
+									create now!
+								</button>
+							</div>
+
+						</div>
+					</div>
+				</form>
 				<!--COMMENTS TEST -->
 				<div class="input-group">
 					<input id="user" type="text" class="form-control input-sm" value="" placeholder="User" />
@@ -97,6 +143,7 @@
 					<span class="input-group-btn" style="width:0px;"></span>
 					<button id="sendbutton" type="button" class="btn btn-default" style="margin-left:-2px">send</button>
 				</div>
+
 				<div id="comments-placer"></div>
 				<!--COMMENTS TEST -->
 				<!--<p><img class="img-responsive" src="../assets/img/blog01.jpg" alt=""></p>-->
@@ -170,6 +217,7 @@
 <script src="assets/js/lib/bootstrap-slider.js"></script>
 <script src="assets/js/lib/bootstrap-switch.js"></script>
 <script src="assets/js/lib/showdown.js"></script>
+<script src="assets/js/lib/threex.objcoord.js"></script>
 
 <script src="assets/js/content-manager.js"></script>
 <script src="assets/js/math.js"></script>
@@ -196,14 +244,9 @@
 
 	update = function(dt){
 		controls.update();
-		if(scene.getObjectByName("myObject")){
-			if(!play)
-				rotateAroundWorldAxis(scene.getObjectByName("myObject"), new THREE.Vector3(0,1,0), ROT_SPEED );
-		}
-		if(scene.getObjectByName("linesGroup")){
-			if(!play)
-				rotateAroundWorldAxis(scene.getObjectByName("linesGroup"), new THREE.Vector3(0,1,0), ROT_SPEED );
-		}
+		if(play)
+			rotateAroundWorldAxis(scene, new THREE.Vector3(0,1,0), ROT_SPEED );
+
 
 	};
 	//If you wanna do something else... put it here ----------------------------
@@ -221,7 +264,7 @@
 
 
 	loadArticleContent('proxy.php?requrl='+'http://127.0.0.1:3000/',getQueryVariable('a'),getQueryVariable('b'));
-	fromURL(MP + 'Creeper/Creeper3.obj',MP +  'Creeper/creeper_tex.png','myObject',function(obj){
+	/*fromURL(MP + 'Creeper/Creeper3.obj',MP +  'Creeper/creeper_tex.png','myObject',function(obj){
 		obj.name = 'creeper';
 		obj.position = base.position;
 		obj.scale.set(0.5,0.5,0.5);
@@ -230,7 +273,7 @@
 		obj.castShadow = true;
 		obj.receiveShadow = true;
 		scene.add(obj);
-	});
+	});*/
 
 	THREE.DefaultLoadingManager.onLoad= function () {
 		console.log("Terminado");

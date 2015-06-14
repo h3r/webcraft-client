@@ -161,13 +161,8 @@
                         console.log('download complete:');
                         console.log('succed:'+ok+' failed:'+failed);
 
-                        object.box = getCompoundBoundingBox(object);
-                        var group_center = new THREE.Vector3();
-                        group_center.subVectors(object.box.max,object.box.min);
-                        group_center.divideScalar(2);
-
-                        object.bounding_center = group_center;
-                        object.bounding_radius = group_center.distanceTo ( object.box.max );
+                        object.box = new THREE.Box3().setFromObject(object);
+                        object.bounding_radius = (object.box.center()).distanceTo ( object.box.max );
 
                         callback(object);
 
@@ -176,19 +171,4 @@
                 },onProgress, onError);
             })();
         }
-    }
-
-    function getCompoundBoundingBox(object3D) {
-        var box = null;
-        object3D.traverse(function (obj3D) {
-            var geometry = obj3D.geometry;
-            if (geometry === undefined) return;
-            geometry.computeBoundingBox();
-            if (box === null) {
-                box = geometry.boundingBox;
-            } else {
-                box.union(geometry.boundingBox);
-            }
-        });
-        return box;
     }
