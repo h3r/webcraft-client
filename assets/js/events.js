@@ -51,6 +51,21 @@ $('.comment-3d').on('click',function(ev){
         e.style.display = 'block';
 });
 
-$("form").submit(function(){
+function getFormData(dom_query){
+    var out = {};
+    var s_data = $(dom_query).serializeArray();
+    //transform into simple data/value object
+    for(var i = 0; i<s_data.length; i++){
+        var record = s_data[i];
+        out[record.name] = record.value;
+    }
+    return out;
+}
+
+$("form").submit(function(event){
+    event.preventDefault();
+    var form = getFormData(this);
+    form['content'] = $("#newcontent").html();
+    console.log(form);
     alert("Submitted");
 });
