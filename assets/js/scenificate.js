@@ -95,7 +95,37 @@ Scn.prototype = {
                 frameDelta -= dt;
             }
 
+            var emptyOBJ = new THREE.Object3D();
+          	emptyOBJ.name = 'myEmptyObj';
+          	scene.add( emptyOBJ );
+
             requestAnimationFrame(Scn.prototype.render);
+            $(".comment-3d:not(.tabularasa)").each(function(index){
+              var coords = $( this ).data('xyz');
+              emptyOBJ.position.x = coords.x;
+              emptyOBJ.position.y = coords.y;
+              emptyOBJ.position.z = coords.z;
+              coords = THREEx.ObjCoord.cssPosition(emptyOBJ, camera, renderer);
+              $( this ).css('left', (5+coords.x)+'px');
+              $( this ).css('top', (125+coords.y)+'px');
+              $( this ).css('z-index', coords.z+10000);
+
+            });
+
+            $(".comment-3d-form").each(function(index){
+              emptyOBJ.position.x = currentPoint.x;
+              emptyOBJ.position.y = currentPoint.y;
+              emptyOBJ.position.z = currentPoint.z;
+              var coords = THREEx.ObjCoord.cssPosition(emptyOBJ, camera, renderer);
+              console.log(coords)
+              $( this ).css('left', (5+coords.x)+'px');
+              $( this ).css('top', (125+coords.y)+'px');
+              $( this ).css('z-index', coords.z+10000);
+
+            });
+
+
+            scene.remove(scene.getObjectByName('myEmptyObj'));
 
         }, 1000 * INV_MAX_FPS );
 

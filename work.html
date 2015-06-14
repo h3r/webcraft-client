@@ -90,14 +90,14 @@
 				<div id="canvas-slider" value='0' style="width: 100%;"></div>
 				<input type="checkbox" name="playpause" checked>
 
-				<div class="comment-3d">
-					<div class="comment-3d-title">NOT GATE SPOTED</div>
+				<div class="comment-3d tabularasa">
+					<div class="comment-3d-title">NOT GATE FOUND</div>
 					<div class="comment-3d-icon circle_pie"></div>
 					<div class="comment-3d-container">
 
 						<div class="comment-3d-content">
 							<img src="assets/img/avatar.jpg" sizes="64px 64px" align="left">
-							Hola que tal como estas?
+							<span class="comment-3d-text">Hola que tal como estas?</span>
 							<div class="comment-3d-reply-container">
 								<div class="comment-3d-reply">
 									ESto es mi rewply
@@ -284,29 +284,8 @@
 	};
 
 	////SENDGETCOMMENTS start
-	var sendComment = function(obj, $callback){
-		$.ajax({
-			url:"sendcomment.php",
-			type: "post",
-			data :obj,
-			dataType:"json",
-			success: $callback
-		});
-	}
 
-	var getComments = function($callback){
-		obj = {};
-		obj.a =getQueryVariable('a');
-		obj.b =getQueryVariable('b');
-		$.ajax({
-			url:"getcomments.php",
-			type: "post",
-			data :obj,
-			dataType:"json",
-			success: $callback
-		});
-	}
-
+/*
 
 	$( "#sendbutton" ).on('click', function() {
 		if(!($("#user").val().length === 0)){
@@ -333,6 +312,7 @@
 	getComments(function(result){
 		$("#comments-placer").html(result);
 	});
+	*/
 	///SENDGETCOMMENTS end
 
 	//--------------------------------------------------------------------------

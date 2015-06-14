@@ -69,6 +69,16 @@
 
 .comment-3d, .comment-3d-form{
     padding:1em 0 13px 1em;
+    display: none;
+    position : absolute;
+    top: 0px;
+    left: 0px;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 .comment-3d-title{
 
@@ -120,7 +130,6 @@
     padding: 0 1em 1em 0
 }
 .comment-3d-reply-container{
-
     margin-top: calc(32px + 1em);
 }
 
