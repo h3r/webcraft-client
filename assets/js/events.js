@@ -72,14 +72,6 @@ function onMouseDown(e){
         //console.log(intersects[0].point , $('.tooltip-inner').html());
 }
 
-function commentOnClick(ev){
-    var e = ev.currentTarget.children[2].children[0];
-    if(e.style.display == 'block')
-        e.style.display = 'none';
-    else
-        e.style.display = 'block';
-}
-
 /*$('.comment-3d').on('click',function(ev){
     var e = ev.currentTarget.children[2].children[0];
     if(e.style.display == 'block')
@@ -110,13 +102,22 @@ function updateComments(comments){
     for(var j=0; j<comments.length;++j){
       if($( this ).children('.comment-3d-title').html() == comments[j].title){
         //update this one
-        console.log("hola?");
         $( this ).children('.comment-3d-title').html(comments[j].title);
         $( this ).find('.comment-3d-text').html(comments[j].text);
 
+        if(comments[j].comments){
+          var replies = $( this).find('.comment-3d-replies');
+          replies.empty();
+
+          for(var k = 0; k< comments[j].comments.length; k++)
+          replies.append( '<div class="comment-3d-reply">'+comments[j].comments[k]+'</div>' );
+
+        }
+        //replies.empty();
+        //console.log(comments);
+
+
         //delete
-
-
         comments.splice(j, 1);
         return;
 
@@ -125,15 +126,40 @@ function updateComments(comments){
 
   });
   for(var j=0; j<comments.length;++j){
-    console.log(comments);
     var myComment = blankslate.clone();
     myComment.removeClass('tabularasa');
     myComment.children('.comment-3d-title').html(comments[j].title);
     myComment.find('.comment-3d-text').html(comments[j].content);
     myComment.css('display','block');
     myComment.appendTo($("#sheet"));
-    myComment.on('click', commentOnClick);
     myComment.data('xyz', JSON.parse(comments[j].xyz));
+
+
+    myComment.find('.comment-3d-icon, .comment-3d-title').on('click', function(ev){
+        var e = $(ev.target).parent().find('.comment-3d-content');
+        if(e.css('display') == 'block')
+            e.css('display','none');
+        else
+        e.css('display','block');
+    });
+
+    myComment.find('.reply-btn').click(function(e){
+      alert("hola");
+      //estoy demaciado dormido como para pensar esto bien. Que dios se apiade de nosotros
+      var element = $(e.target).parent().parent().parent().parent();
+      var dataToSend = {};
+      dataToSend.a =getQueryVariable('a');
+      dataToSend.b =getQueryVariable('b');
+      dataToSend.comment = element.find(".my-reply").val();
+      dataToSend.thread = element.find(".comment-3d-title").text();
+      element.find(".my-reply").val("");
+      sendComment(dataToSend,function(result){
+        getComments(function(result){
+      	   updateComments(result);
+      	});
+      });
+    });
+
   }
 }
 
@@ -144,7 +170,6 @@ $("form").submit(function(event){
     form.b =getQueryVariable('b');
     form['content'] = $("#newcontent").html();
     form['xyz'] = JSON.stringify(currentPoint);
-    console.log(form);
     $(".comment-3d-form").css('display','none');
     sendComment(form,function(result){
       getComments(function(result){

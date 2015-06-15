@@ -117,7 +117,6 @@ Scn.prototype = {
               emptyOBJ.position.y = currentPoint.y;
               emptyOBJ.position.z = currentPoint.z;
               var coords = THREEx.ObjCoord.cssPosition(emptyOBJ, camera, renderer);
-              console.log(coords)
               $( this ).css('left', (5+coords.x)+'px');
               $( this ).css('top', (125+coords.y)+'px');
               $( this ).css('z-index', coords.z+10000);
