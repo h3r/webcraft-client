@@ -160,3 +160,57 @@ var articles = new Array([
     }
 
 ]);
+
+function updateCommentPosition(callback){
+var emptyOBJ = new THREE.Object3D();
+emptyOBJ.name = 'myEmptyObj';
+scene.add( emptyOBJ );
+
+var tmpCanvas = $("#canvas-placer");
+//canvasleft = tmpCanvas.offset().left;
+var width = tmpCanvas.width();
+var minY = tmpCanvas.height()+tmpCanvas.position().top;
+
+requestAnimationFrame(Scn.prototype.render);
+$(".comment-3d:not(.tabularasa)").each(function(index){
+  var coords = $( this ).data('xyz');
+  emptyOBJ.position.x = coords.x;
+  emptyOBJ.position.y = coords.y;
+  emptyOBJ.position.z = coords.z;
+  coords = THREEx.ObjCoord.cssPosition(emptyOBJ, camera, renderer);
+  $( this ).css('left', (2+coords.x)+'px');
+
+  if(minY-28< (172+coords.y)){
+    $( this ).css('visibility','hidden');
+  }else{
+    $( this ).css('visibility','visible');
+    $( this ).css('top', (172+coords.y)+'px');
+  }
+  $( this ).css('z-index',  -Math.floor(coords.z*1000)+10000);
+  $( this ).css('min-width',  (width-(2+coords.x))+'px');
+  }
+);
+
+$(".comment-3d-form").each(function(index){
+  emptyOBJ.position.x = currentPointB.x;
+  emptyOBJ.position.y = currentPointB.y;
+  emptyOBJ.position.z = currentPointB.z;
+  var coords = THREEx.ObjCoord.cssPosition(emptyOBJ, camera, renderer);
+  $( this ).css('left', (2+coords.x)+'px');
+  if(minY-28< (171+coords.y)){
+    $( this ).css('visibility','hidden');
+  }else{
+    $( this ).css('visibility','visible');
+    $( this ).css('top', (172+coords.y)+'px');
+  }
+//  console.log(coords.z);
+  $( this ).css('z-index', -Math.floor(coords.z*1000)+10000);
+  $( this ).css('min-width',  (width-(2+coords.x))+'px')
+
+});
+
+
+scene.remove(scene.getObjectByName('myEmptyObj'));
+
+callback.call();
+}

@@ -31,7 +31,7 @@
         geometry.vertices.push(new THREE.Vector3(b.x, b.y, b.z));
 
         var material = new THREE.LineBasicMaterial({
-            color: 0xff0000
+            color: 0x888888
         });
 
         var line = new THREE.Line(geometry, material);

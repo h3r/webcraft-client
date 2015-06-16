@@ -40,9 +40,12 @@ var getComments = function($callback){
   });
 }
 //SEND/RECEIVE COMMENTS
-var currentPoint = new THREE.Vector3();
+var currentPointB = new THREE.Vector3();
+var currentPointA = new THREE.Vector3();
+
 
 function onMouseDown(e){
+    play=false;
     mouse.x = ( event.offsetX / renderer.domElement.width ) * 2 - 1;
     mouse.y = - ( event.offsetY / renderer.domElement.height ) * 2 + 1;
 
@@ -65,7 +68,9 @@ function onMouseDown(e){
         b.multiplyScalar( scene.getObjectByName("myObject").bounding_radius);
         b.addVectors(scene.getObjectByName("myObject").box.center(), b);
         createLine(hit,b,++id);
-        currentPoint = hit;
+        currentPointB = b;
+        currentPointA = hit;
+
         $(".comment-3d-form").css('display','block');
         //console.log(a,b,scene.getObjectByName("myObject").bounding_radius);
     }
@@ -91,8 +96,6 @@ function getFormData(dom_query){
     }
     return out;
 }
-
-
 
 //given the list of comments, we
 function updateComments(comments){
@@ -133,18 +136,39 @@ function updateComments(comments){
     myComment.css('display','block');
     myComment.appendTo($("#sheet"));
     myComment.data('xyz', JSON.parse(comments[j].xyz));
+    myComment.data('xyz2', JSON.parse(comments[j].xyz2));
+
+
+    var pA = new THREE.Vector3();
+    pA.x = myComment.data('xyz').x;
+    pA.y = myComment.data('xyz').y;
+    pA.z = myComment.data('xyz').z;
+
+    var pB = new THREE.Vector3();
+    pB.x =  myComment.data('xyz2').x;
+    pB.y =  myComment.data('xyz2').y;
+    pB.z =  myComment.data('xyz2').z;
+
+
+    createLine(pA,pB,comments[j].title);
 
 
     myComment.find('.comment-3d-icon, .comment-3d-title').on('click', function(ev){
         var e = $(ev.target).parent().find('.comment-3d-content');
-        if(e.css('display') == 'block')
+        if(e.css('display') == 'block'){
+          $(ev.target).parent().data('selected',false);
             e.css('display','none');
-        else
-        e.css('display','block');
+        }
+        else{
+          $('.comment-3d-content').css('display','none');
+          $(ev.target).parent().data('selected',true);
+
+          e.css('display','block');
+        }
+
     });
 
     myComment.find('.reply-btn').click(function(e){
-      alert("hola");
       //estoy demaciado dormido como para pensar esto bien. Que dios se apiade de nosotros
       var element = $(e.target).parent().parent().parent().parent();
       var dataToSend = {};
@@ -153,11 +177,13 @@ function updateComments(comments){
       dataToSend.comment = element.find(".my-reply").val();
       dataToSend.thread = element.find(".comment-3d-title").text();
       element.find(".my-reply").val("");
-      sendComment(dataToSend,function(result){
-        getComments(function(result){
-      	   updateComments(result);
-      	});
-      });
+      if(dataToSend.comment != ""){
+        sendComment(dataToSend,function(result){
+          getComments(function(result){
+      	     updateComments(result);
+      	  });
+        });
+      }
     });
 
   }
@@ -169,9 +195,11 @@ $("form").submit(function(event){
     form.a =getQueryVariable('a');
     form.b =getQueryVariable('b');
     form['content'] = $("#newcontent").html();
-    form['xyz'] = JSON.stringify(currentPoint);
+    form['xyz'] = JSON.stringify(currentPointB);
+    form['xyz2']= JSON.stringify(currentPointA);
     $(".comment-3d-form").css('display','none');
     sendComment(form,function(result){
+      play=true;
       getComments(function(result){
     	   updateComments(result);
     	});
